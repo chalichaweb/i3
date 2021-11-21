@@ -1,0 +1,68 @@
+#!/bin/bash
+
+set -e
+
+get_kbdlayout() {
+    layout=$(setxkbmap -query | grep -oP 'layout:\s*\K([\w,]+)')
+    echo -n "${layout:0:2}"
+}
+
+get_CapsLock() {
+    CapsLock=$(xset q | grep -oP 'Caps Lock:\s{0,}\K([\w]+)')
+    echo $CapsLock
+}
+
+get_color() {
+    current_CapsLock=$(get_CapsLock)
+    if [ $current_CapsLock = "on" ]; then
+        color=$(grep -oP 'color_bad\s=\s"\K(.{7})' "/etc/i3status.conf")
+    else
+        color=$(grep -oP 'color_good\s=\s"\K(.{7})' "/etc/i3status.conf")
+    fi
+    color="\"color\":\"$color\","
+    echo $color
+}
+
+toggle() {
+    def_layout="us"
+    current_layout=$(get_kbdlayout)
+    if [ $current_layout != $def_layout ]; then
+        setxkbmap us,ru
+    else
+        setxkbmap ru,us
+    fi
+    pgrep i3status | xargs --no-run-if-empty kill -s USR1
+    # notify-send --icon=../../devices/48@2x/keyboard --urgency=low "Toggle keyboard layout at $current_layout"
+}
+
+i3status() {
+    while :
+    do
+        read line
+        current_layout=$(get_kbdlayout)
+        current_layout=${current_layout//ru/RU}
+        current_layout=${current_layout//us/US}
+        current_CapsLock=$(get_CapsLock)
+        current_CapsLock=${current_CapsLock//on/}
+        current_CapsLock=${current_CapsLock//off/}
+        current_color=$(get_color)
+        block="{\"name\":\"Keyboard Layout\",$current_color\"markup\":\"none\",\"full_text\":\" ${current_CapsLock} ${current_layout} \",\"align\":\"center\",\"min_width\":70}"
+        echo "${line/\[\{/\[$block,\{}" || exit 1
+    done
+}
+
+subcommand="$1"
+
+case $subcommand in
+    "get")
+        echo -n $(get_kbdlayout)
+        ;;
+    "toggle")
+        toggle
+        ;;
+    "i3status")
+        i3status
+        ;;
+esac
+
+
