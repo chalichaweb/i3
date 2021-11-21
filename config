@@ -1,0 +1,394 @@
+# Раскладку клавиш смотреть здесь
+# xmodmap -pke
+
+# Конфигурационный файл i3
+# Документация://i3wm.org/docs/userguide.html
+
+# Клавиша модификатор (Mod1=<Alt>, Mod4=<Super>)
+set $mod Mod4
+
+################ Настройки звуковой подсистемы ################
+
+# exec --no-startup-id pa-applet
+# exec --no-startup-id pulseaudio
+# bindsym $mod+Ctrl+m exec xfce4-terminal -e 'alsamixer'
+exec --no-startup-id xfce4-volumed-pulse
+# $mod+M
+bindcode $mod+58 --release exec pavucontrol
+
+
+
+################ Приложения ################
+
+# Закрытие активное окно
+# $mod+q
+bindcode $mod+24 kill
+# $mod+Shift+q
+bindcode $mod+Shift+24 --release exec --no-startup-id xkill
+
+# Изменение раскладки клавиатуры
+exec --no-startup-id setxkbmap "us,ru"
+bindsym $mod+space exec --no-startup-id $HOME/.i3/i3-ru-layout toggle
+bindsym Menu exec --no-startup-id $HOME/.i3/i3-ru-layout toggle
+
+# Обновление конфигурации окружения
+# $mod+,
+bindcode $mod+59 --release reload
+# $mod+.
+bindcode $mod+60 --release restart
+
+# Меню приложений
+bindsym $mod+F1 --release mode "$mode_app_menu"
+bindsym $mod+Shift+F1 --release exec --no-startup-id xfce4-appfinder
+
+# Запуск файлового менеджера
+bindsym $mod+F2 --release exec thunar
+bindsym $mod+Shift+F2 --release exec pkexec thunar && :
+bindsym $mod+backslash --release exec thunar
+bindsym $mod+Shift+backslash --release exec pkexec thunar && :
+
+# Запуск терминала
+bindsym $mod+F3 --release exec xfce4-terminal
+bindsym $mod+Shift+F3 --release exec xfce4-terminal -e 'pkexec su'
+bindsym $mod+Return --release exec xfce4-terminal
+bindsym $mod+Shift+Return --release exec xfce4-terminal -e 'pkexec su'
+
+# Запуск редактора кода
+bindsym $mod+F4 --release exec howl
+bindsym $mod+Shift+F4 --release exec atom
+
+# Запуск повседневных приложений
+bindsym $mod+F5 --release exec firefox
+bindsym $mod+F6 --release exec telegram-desktop
+bindsym $mod+F7 --release exec signal-desktop
+bindsym $mod+F8 --release exec rhythmbox
+bindsym $mod+Shift+F8 --release exec xfce4-terminal -e 'musikcube'
+
+# Запуск системных утилит
+bindsym $mod+F9 --release exec xfce4-settings-manager
+bindsym $mod+F10 --release exec xfce4-terminal -e 'system-menu'
+bindsym $mod+F11 --release exec xfce4-terminal -e 'system-settings'
+bindsym $mod+F12 --release exec xfce4-terminal -e 'pkexec htop'
+
+# Создание скриншотов
+bindsym Print exec --no-startup-id xfce4-screenshooter -f $HOME/Изображения/Скриншоты
+bindsym Ctrl+Print --release exec --no-startup-id xfce4-screenshooter -w $HOME/Изображения/Скриншоты
+bindsym Shift+Print --release exec --no-startup-id xfce4-screenshooter -r $HOME/Изображения/Скриншоты
+bindsym $mod+Print --release exec --no-startup-id xfce4-screenshooter -f -c
+bindsym $mod+Ctrl+Print --release exec --no-startup-id xfce4-screenshooter -w -c
+bindsym $mod+Shift+Print --release exec --no-startup-id xfce4-screenshooter -r -c
+
+# Запуск менеджера emoji
+# $mod+` ($mod+ё)
+bindcode $mod+49 --release exec emoji-picker
+
+# Автозапуск приложений
+exec --no-startup-id nitrogen --restore; sleep 1; picom -b
+exec --no-startup-id xfce4-power-manager
+exec --no-startup-id xfce4-clipman
+exec --no-startup-id nm-applet
+exec --no-startup-id blueberry-tray
+exec --no-startup-id pamac-tray
+exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+exec --no-startup-id setcursor
+# exec --no-startup-id ff-theme-util
+# exec --no-startup-id desktop-items
+
+# Специфичные настройки запуска приложений
+for_window [class="AlsaMixer"] floating enable
+for_window [class="appfinder"] floating enable sticky enable resize set 640 720
+for_window [class="Blueberry"] floating enable
+for_window [class="Emoji Picker"] floating enable resize set 800 600
+for_window [title="File Transfer*"] floating enable
+for_window [class="GParted"] floating enable
+for_window [class="Lightdm-settings"] floating enable
+for_window [class="Lxappearance"] floating enable
+for_window [class="Manjaro Settings Manager"] floating enable
+for_window [class="Nitrogen"] floating enable
+for_window [title="Oracle VM VirtualBox Менеджер"] floating enable
+for_window [class="Pamac-manager"] floating enable
+for_window [class="Pamac-updater"] floating enable
+for_window [class="Pavucontrol"] floating enable
+for_window [class="Qtconfig-qt4"] floating enable
+for_window [class="qt5ct"] floating enable
+for_window [class="settings-manager"] floating enable resize set 1240 720
+for_window [class="Simple-scan"] floating enable
+for_window [class="zoom"] floating enable,
+
+
+
+################ Окна ################
+
+# Следование фокуса за указателем мыши
+focus_follows_mouse yes
+
+# Перемещение фокуса с клавиатуры
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# Перемещение окон по рабочему столу
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# Переключение направления разделения контейнеров
+# $mod+d
+bindcode $mod+40 split toggle
+
+# Перемещение на прошлый рабочий стол и обратно (с и без активного окна)
+workspace_auto_back_and_forth yes
+bindsym $mod+Tab --release workspace back_and_forth
+bindsym $mod+Shift+Tab --release move container to workspace back_and_forth; workspace back_and_forth
+
+# Переключение полноэкранного режима активного окна
+# $mod+f
+bindcode $mod+41 --release fullscreen toggle
+
+# Переключение плавающего режима активного окна
+# $mod+Shift+f
+bindcode $mod+Shift+41 --release floating toggle
+
+# Перемещение плавающих окон
+# Mouse+$mod
+floating_modifier $mod
+
+# Перемещение активного окна в скретчпад
+bindsym $mod+minus --release move scratchpad
+
+# Отображение следующего окна из скретчпада или закрытие скретчпада
+bindsym $mod+Shift+minus --release scratchpad show
+
+
+
+################ Рабочие столы ################
+
+# Имена рабочих столов
+set $ws1 1
+set $ws2 2
+set $ws3 3
+set $ws4 4
+set $ws5 5
+set $ws6 6
+set $ws7 7
+set $ws8 8
+set $ws9 9
+set $ws10 10
+
+# Переключение на следующий/предыдущий рабочий стол
+bindsym $mod+Ctrl+Right workspace next
+bindsym $mod+Ctrl+Left workspace prev
+
+# Переключение на рабочий стол
+bindsym $mod+1 --release workspace $ws1
+bindsym $mod+2 --release workspace $ws2
+bindsym $mod+3 --release workspace $ws3
+bindsym $mod+4 --release workspace $ws4
+bindsym $mod+5 --release workspace $ws5
+bindsym $mod+6 --release workspace $ws6
+bindsym $mod+7 --release workspace $ws7
+bindsym $mod+8 --release workspace $ws8
+bindsym $mod+9 --release workspace $ws9
+bindsym $mod+0 --release workspace $ws10
+
+# Перемещение активного окна на рабочий стол
+bindsym $mod+Ctrl+1 --release move container to workspace $ws1
+bindsym $mod+Ctrl+2 --release move container to workspace $ws2
+bindsym $mod+Ctrl+3 --release move container to workspace $ws3
+bindsym $mod+Ctrl+4 --release move container to workspace $ws4
+bindsym $mod+Ctrl+5 --release move container to workspace $ws5
+bindsym $mod+Ctrl+6 --release move container to workspace $ws6
+bindsym $mod+Ctrl+7 --release move container to workspace $ws7
+bindsym $mod+Ctrl+8 --release move container to workspace $ws8
+bindsym $mod+Ctrl+9 --release move container to workspace $ws9
+bindsym $mod+Ctrl+0 --release move container to workspace $ws10
+
+# Перемещение активного она на рабочий стол и переключение на этот рабочий стол
+bindsym $mod+Shift+1 --release move container to workspace $ws1; workspace $ws1
+bindsym $mod+Shift+2 --release move container to workspace $ws2; workspace $ws2
+bindsym $mod+Shift+3 --release move container to workspace $ws3; workspace $ws3
+bindsym $mod+Shift+4 --release move container to workspace $ws4; workspace $ws4
+bindsym $mod+Shift+5 --release move container to workspace $ws5; workspace $ws5
+bindsym $mod+Shift+6 --release move container to workspace $ws6; workspace $ws6
+bindsym $mod+Shift+7 --release move container to workspace $ws7; workspace $ws7
+bindsym $mod+Shift+8 --release move container to workspace $ws8; workspace $ws8
+bindsym $mod+Shift+9 --release move container to workspace $ws9; workspace $ws9
+bindsym $mod+Shift+0 --release move container to workspace $ws10; workspace $ws10
+
+# Переключение на рабочий стол, откуда пришло оповещение от окна
+for_window [urgent=latest] focus
+
+
+
+################ Режимы работы ################
+
+# Заблокировать экран
+# $mod+l
+bindcode $mod+46 --release exec --no-startup-id $HOME/.i3/lockscreen
+
+# Быстрый доступ к избранным приложениям
+# bindsym $mod+F1
+set $mode_app_menu | Частые приложения | F1  | F2  | F3  | F4  | F5  | F6  | F7  | F8  | F12  |
+mode "$mode_app_menu" {
+
+	bindsym F1 --release exec --no-startup-id xfce4-appfinder, mode "default"
+
+	bindsym F2 --release exec thunar, mode "default"
+	bindsym Shift+F2 --release exec pkexec thunar && :, mode "default"
+
+	bindsym F3 --release exec xfce4-terminal, mode "default"
+	bindsym Shift+F3 --release exec xfce4-terminal -e 'pkexec su', mode "default"
+
+	bindsym F4 --release exec io.elementary.code, mode "default"
+	bindsym Shift+F4 --release exec atom, mode "default"
+
+	bindsym F5 --release exec vivaldi-stable, mode "default"
+	bindsym F6 --release exec telegram-desktop, mode "default"
+	bindsym F7 --release exec signal-desktop, mode "default"
+	bindsym F8 --release exec rhythmbox, mode "default"
+
+	bindsym F12 --release exec xfce4-terminal -e 'pkexec htop', mode "default"
+
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
+}
+
+# Меню питания
+bindsym $mod+Escape --release mode "$mode_system"
+bindsym XF86PowerOff --release mode "$mode_system"
+set $mode_system | Управление питанием | F1  | F2  | F3  | F4  |
+mode "$mode_system" {
+    bindsym F1 --release exec --no-startup-id $HOME/.i3/lockscreen, mode "default
+    bindsym F2 --release exec --no-startup-id i3exit logout, mode "default"
+    bindsym F3 --release exec --no-startup-id i3exit reboot, mode "default"
+    bindsym F4 --release exec --no-startup-id i3exit shutdown, mode "default"
+
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+# Изменение размеров окон
+# $mod+r
+bindcode $mod+27 mode "$mode_resize"
+set $mode_resize Уменьшить|Увеличить: | - Вертикальные размеры, | - Горизонтальные размеры
+mode "$mode_resize" {
+        bindsym Left resize shrink width 5 px or 5 ppt
+        bindsym Down resize grow height 5 px or 5 ppt
+        bindsym Up resize shrink height 5 px or 5 ppt
+        bindsym Right resize grow width 5 px or 5 ppt
+
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+
+
+################ Внешний вид ################
+
+# Цветовая палитра для терминала ( ~/.extend.Xresources file )
+# Документация: https://i3wm.org/docs/userguide.html#xresources
+set_from_resource $term_background background
+set_from_resource $term_foreground foreground
+set_from_resource $term_color0     color0
+set_from_resource $term_color1     color1
+set_from_resource $term_color2     color2
+set_from_resource $term_color3     color3
+set_from_resource $term_color4     color4
+set_from_resource $term_color5     color5
+set_from_resource $term_color6     color6
+set_from_resource $term_color7     color7
+set_from_resource $term_color8     color8
+set_from_resource $term_color9     color9
+set_from_resource $term_color10    color10
+set_from_resource $term_color11    color11
+set_from_resource $term_color12    color12
+set_from_resource $term_color13    color13
+set_from_resource $term_color14    color14
+set_from_resource $term_color15    color15
+
+# Настройка i3bar
+bar {
+	i3bar_command i3bar
+
+	# Статусная информация
+	status_command i3status | $HOME/.i3/i3-ru-layout i3status
+
+	# Позиция i3bar
+	position top
+
+	## please set your primary output first. Example: 'xrandr --output eDP1 --primary'
+	#	tray_output primary
+	#	tray_output eDP1
+
+	# Шрифт i3bar
+	font pango:Montserrat Light, FontAwesome 12
+
+	# Название рабочего стола - его номер
+	strip_workspace_numbers yes
+
+	# Ширина кнопок рабочих столов
+	workspace_min_width 40
+
+	# Отступы в трее
+	tray_padding 4
+
+	# Цвета оормления i3bar
+    colors {
+        background #202020
+        statusline #C0C0C0
+        separator #606060
+
+	#                  border  backgr. text
+        focused_workspace  #E0C0A0 #E0C0A0 #202020
+        active_workspace   #C0C0C0 #606060 #C0C0C0
+        inactive_workspace #606060 #303030 #A0A0A0
+        urgent_workspace   #606060 #C0C0C0 #202020
+        binding_mode       #606060 #303030 #A0A0A0
+    }
+}
+
+# Скрытие/отображение i3bar
+# $mod+h
+bindcode $mod+43 bar mode toggle
+
+# Цвета темы оформления
+# class                   border  backgr. text    indic.   child_border
+  client.focused          #A08060 #A08060 #404040 #F0D0C0
+  client.focused_inactive #202020 #202020 #808080 #202020
+  client.unfocused        #202020 #202020 #808080 #202020
+  client.urgent           #808080 #808080 #F0D0B0 #808080
+  client.placeholder      #000000 #404040 #ffffff #000000
+  client.background       #404040
+
+# Шрифт заголовков окон
+font pango:Montserrat ExtraBold 11
+
+# Обычные рамки окон <normal|1pixel|pixel xx|none|pixel>
+default_border pixel 3
+default_floating_border none
+
+# Сокрытие рамок
+hide_edge_borders none
+
+# Изменение рамок активного окна
+# $mod+p
+bindcode $mod+33 --release border none
+# $mod+[
+bindcode $mod+34 --release border pixel 3
+# $mod+]
+bindcode $mod+35 --release border normal
+
+################ Промежутки между окнами ################
+
+# Внутренние и внешние промежутки
+gaps inner 20
+gaps outer -10
+
+# Отключение промежутков при наличии единственного окна на рабочем столе
+# smart_gaps on
+
+# Отключение рамок при наличии единственного окна на рабочем столе
+# on|no_gaps
+smart_borders on
